@@ -17,9 +17,8 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-weight:400}
-body{zoom:120%}
 header{padding:20px 24px 8px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px}
-h1{font-size:22px;font-weight:700;margin:0;text-wrap:balance}
+h1{font-size:24px;font-weight:700;margin:0;text-wrap:balance}
 header p{margin:0;color:var(--muted);font-size:13px}
 main{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:16px;padding:8px 24px 24px}
 @media (max-width:860px){main{grid-template-columns:1fr;padding:8px 16px 16px}header{padding:16px 16px 4px}}
@@ -41,8 +40,19 @@ main{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:16px;padding
 .info.dead .val{background:var(--dead);color:#fff}
 .info.ok .val{background:#2E7D4F;color:#fff}
 .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.chartbox h2{font-size:16px;font-weight:700;margin:0;text-align:center}
-.canvas-wrap{position:relative;height:clamp(380px,62vh,640px)}
+.chartbox h2{font-size:24px;font-weight:700;margin:0;text-align:center}
+.chartbox h3{font-size:18px;font-weight:700;margin:0;text-align:center}
+.chartrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
+.canvas-wrap{position:relative;height:clamp(380px,62vh,640px);min-width:0}
+.legend{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.legend button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:3px 4px;border-radius:4px;cursor:pointer;font:400 12px var(--font);color:var(--ink);text-align:left;white-space:nowrap}
+.legend button:hover{background:#F2EFEB}
+.legend button:focus-visible{outline:2px solid var(--input);outline-offset:1px}
+.legend button.off{color:var(--muted);text-decoration:line-through}
+.legend .sw{flex:none;width:16px;height:12px;border-radius:2px}
+.legend .sw.ln{height:0;border-top:4px solid;border-radius:0}
+.info.sug .val{color:var(--input)}
+@media (max-width:1100px){.chartrow{grid-template-columns:1fr}.legend{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:4px 12px}.legend button{width:auto}}
 .note{font-size:12px;color:var(--muted);margin:0}
 footer{padding:0 24px 24px;font-size:11.5px;color:var(--muted);max-width:1100px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -62,18 +72,13 @@ footer{padding:0 24px 24px;font-size:11.5px;color:var(--muted);max-width:1100px}
     <div class="row info" id="o_dead_row"><div class="val" id="o_dead">—</div><div class="lbl">Base de Datos = INACTIVA<small>(BD Asignada + Redo = Storage)</small></div></div>
     <div class="row info"><div class="val" id="o_last">—</div><div class="lbl">Último dato real</div></div>
     <div class="sec"><br><br>Datos sugeridos</div>
-    <div style="color: #004AAC;">
-        <div class="lbl" style="padding: 0 0 0 1ch; margin: 2px 0; line-height: 1.0; font-size: 0.85em;">
-          <span style="display: inline-block; width: 4ch; text-align: right;">3.5</span> TB Nuevo requerimiento fiscal.</div>
-        <div class="lbl" style="padding: 0 0 0 1ch; margin: 2px 0; line-height: 1.0; font-size: 0.85em;">
-          <span style="display: inline-block; width: 4ch; text-align: right;">11.0</span> TB Operación (no visible).</div>
-        <div class="lbl" style="padding: 0 0 0 1ch; margin: 2px 0; line-height: 1.0; font-size: 0.85em;">
-          <span style="display: inline-block; width: 4ch; text-align: right;">21.0</span> TB Operación (11 TB no visible + 10 TB Nuevo)</div>
-    </div>
+    <div class="row info sug"><div class="val">3.5 TB</div><div class="lbl">Requerimiento de cliente<small>(Información archivada para SAT)</small></div></div>
+    <div class="row info sug"><div class="val">11.0 TB</div><div class="lbl">Operación<small>(Requiere autorización lectura/escritura)</small></div></div>
+    <div class="row info sug"><div class="val">21.0 TB</div><div class="lbl">Operación<small>(10.0 TB Nuevos + 11.0 TB No visibles)</small></div></div>
   </section>
   <section class="chartbox" aria-label="Gráfica de proyección">
     <h2 id="ctitle">Tamaño de Base de Datos RAP (TB): Real y Proyectado</h2>
-    <div class="canvas-wrap"><canvas id="chart" role="img" aria-label="Tamaño de la base de datos real y proyectado frente al storage"></canvas></div>
+    <div class="chartrow"><div class="canvas-wrap"><canvas id="chart" role="img" aria-label="Tamaño de la base de datos real y proyectado frente al storage"></canvas></div><ul class="legend" id="legend" aria-label="Leyenda (clic para ocultar o mostrar una serie)"></ul></div>
     <p class="note" id="cnote"></p>
   </section>
 </main>
@@ -185,12 +190,12 @@ const deadLabel={id:'deadLabel',afterDatasetsDraw(ch){const ds=ch.data.datasets.
   const t='INACTIVA '+ch.data.labels[i]; const w=g.measureText(t).width+10; let x=b.x-w/2; x=Math.max(ch.chartArea.left,Math.min(x,ch.chartArea.right-w)); const y=Math.max(ch.chartArea.top+2,b.y-24);
   g.fillStyle='#004AAC'; g.fillRect(x,y,w,18); g.fillStyle='#fff'; g.textBaseline='middle'; g.fillText(t,x+5,y+9); g.restore();});}};
 const fixPos={id:'fixPos',beforeEvent(ch,args){const e=args.event,n=e.native;if(!n||n.clientX==null)return;const r=ch.canvas.getBoundingClientRect();if(!r.width)return;e.x=(n.clientX-r.left)*ch.width/r.width;e.y=(n.clientY-r.top)*ch.height/r.height;}};
-let chart;
+let chart, LASTI=-1;
 function update(){
   const v={}; INPUTS.forEach(c=>v[c.id]=c.val);
   const o=runModel(RAW,v);
   const rows=o.rows.filter(r=>r.m<=END), labels=rows.map(r=>lab(r.m)), t=x=>+(x/TB).toFixed(2);
-  const lastI=rows.findIndex(r=>!r.real)-1;
+  const lastI=rows.findIndex(r=>!r.real)-1; LASTI=lastI;
   const real=k=>rows.map((r,i)=>i<=lastI?t(r[k]):null), proj=k=>rows.map((r,i)=>i>=lastI?t(r[k]):null);
   const startBar=rows.map((r,i)=>i===lastI+1?t(r.STO):null), deadBar=rows.map(r=>r.m===o.dead?t(r.STO):null);
   const deadTxt=o.dead===null?'Sin quiebre':lab(o.dead);
@@ -201,32 +206,41 @@ function update(){
   document.getElementById('cnote').innerHTML = o.dead === null 
   ? 'La base de datos no llega al storage en el horizonte de 36 meses (hasta ' + lab(o.lastReal + 36) + ').'
   : (o.dead > END 
-      ? 'La fecha de inactividad (' + deadTxt + ') queda después del rango de la gráfica (dic \'27).' 
+      ? 'La fecha de inactividad (' + deadTxt + ') queda después del rango de la gráfica (' + lab(END) + ').' 
       : `<div style="display: block; margin-top: 2em; text-align: left;">
            <div style="display: block; font-size: 12px; color: #004AAC;">*** Barra azul: mes en que la BD Asignada + Redo supera el Storage.</div>
-           <div style="display: block; font-size: 12px; color: #A6A6A6; margin-top: 4px;">*** Barra gris: inicio de la proyección.</div>
-           <div style="display: block; font-size: 15px; color: #D14600; margin-top: 12px;"><h2 id="ctitle">Presionar <b>F11</b> (o <b>Esc</b>) para entrar/salir de pantalla completa.</h2></div>
+           <div style="display: block; font-size: 12px; color: #808080; margin-top: 4px;">*** Barra gris: inicio de la proyección.</div>
+           <div style="display: block; font-size: 15px; color: #D14600; margin-top: 12px;"><h3 id="ctitle">Presionar <b>F11</b> (o <b>Esc</b>) para entrar/salir de pantalla completa.</h3></div>
          </div>`);
   const ds=[
-    {type:'line',label:'Database Assigned +Redo (TB)',data:rows.map(r=>t(r.DBA)),borderColor:C.dba,borderWidth:3,pointRadius:0,fill:false,order:1},
-    {type:'line',label:'Storage (TB)',data:rows.map(r=>t(r.STO)),borderColor:C.sto,borderWidth:4,pointRadius:0,fill:false,order:0},
+    {type:'line',label:'Database Assigned +Redo',data:rows.map(r=>t(r.DBA)),borderColor:C.dba,borderWidth:3,pointRadius:0,fill:false,order:1},
+    {type:'line',label:'Storage',data:rows.map(r=>t(r.STO)),borderColor:C.sto,borderWidth:4,pointRadius:0,fill:false,order:0},
     {type:'bar',label:'Start of Projection',data:startBar,backgroundColor:C.start,borderColor:'#0E1020',borderWidth:1.5,barPercentage:1,categoryPercentage:.9,order:3},
     {type:'bar',label:'Database Inactive ('+deadTxt+')',data:deadBar,backgroundColor:C.dead,borderColor:C.dead,barPercentage:1,categoryPercentage:.9,order:2,_dead:true},
-    {type:'line',label:'Data Base Used (TB)',data:real('DBU'),backgroundColor:C.used,borderWidth:0,pointRadius:0,fill:'origin',order:8},
-    {type:'line',label:'Projected DB Used (TB)',data:proj('DBU'),backgroundColor:C.usedP,borderWidth:0,pointRadius:0,fill:'origin',order:8},
-    {type:'line',label:'Data Base Total (TB)',data:real('DBT'),backgroundColor:C.tot,borderWidth:0,pointRadius:0,fill:'origin',order:9},
-    {type:'line',label:'Projected DB Total (TB)',data:proj('DBT'),backgroundColor:C.totP,borderWidth:0,pointRadius:0,fill:'origin',order:9},
+    {type:'line',label:'Data Base Used',data:real('DBU'),backgroundColor:C.used,borderWidth:0,pointRadius:0,fill:'origin',order:8},
+    {type:'line',label:'Projected DB Used',_proj:true,data:proj('DBU'),backgroundColor:C.usedP,borderWidth:0,pointRadius:0,fill:'origin',order:8},
+    {type:'line',label:'Data Base Total',data:real('DBT'),backgroundColor:C.tot,borderWidth:0,pointRadius:0,fill:'origin',order:9},
+    {type:'line',label:'Projected DB Total',_proj:true,data:proj('DBT'),backgroundColor:C.totP,borderWidth:0,pointRadius:0,fill:'origin',order:9},
   ];
   if(!chart){
     chart=new Chart(document.getElementById('chart'),{data:{labels,datasets:ds},plugins:[deadLabel,fixPos],options:{
       responsive:true,maintainAspectRatio:false,animation:{duration:250},interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'right',labels:{boxWidth:14,font:{family:'Inter',size:12},color:'#0E1020',
-        sort:(a,b)=>[6,4,7,5,0,1,2,3].indexOf(a.datasetIndex)-[6,4,7,5,0,1,2,3].indexOf(b.datasetIndex)}},
-        tooltip:{filter:i=>i.raw!=null,callbacks:{label:i=>i.dataset.label.replace(/ \(.*\)$/,'')+': '+fmt(i.raw,2)+' TB'}}},
+      plugins:{legend:{display:false},
+        tooltip:{filter:i=>i.raw!=null&&!(i.dataset._proj&&i.dataIndex===LASTI),callbacks:{label:i=>i.dataset.label.replace(/ \(.*\)$/,'')+': '+fmt(i.raw,2)+' TB'}}},
       scales:{x:{grid:{display:false},ticks:{maxRotation:90,minRotation:90,autoSkip:false,font:{family:'Inter',size:10,weight:'600'},color:'#0E1020'}},
               y:{min:60,suggestedMax:120,ticks:{stepSize:10,callback:v=>fmt(v,0),font:{family:'Inter',size:12},color:'#0E1020'},grid:{color:'#E4DED7'},title:{display:true,text:'TB',color:'#5B5E6E'}}}}});
-    if(matchMedia('(max-width:860px)').matches){chart.options.plugins.legend.position='bottom';chart.options.scales.x.ticks.autoSkip=true;chart.update();}
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>chart.update('none'));
   } else { chart.data.labels=labels; chart.data.datasets.forEach((d,i)=>{d.data=ds[i].data; d.label=ds[i].label;}); chart.update(); }
+  drawLegend();
+}
+function drawLegend(){
+  const ul=document.getElementById('legend'); ul.innerHTML='';
+  [6,4,7,5,0,1,2,3].forEach(i=>{const d=chart.data.datasets[i]; const li=document.createElement('li'); const b=document.createElement('button'); b.type='button';
+    const line=d.type==='line'&&d.fill===false; const col=line?d.borderColor:d.backgroundColor;
+    b.innerHTML=`<span class="sw${line?' ln':''}" style="${line?'border-color':'background'}:${col};${d.type==='bar'?'border:1px solid #0E1020':''}"></span><span></span>`; b.lastChild.textContent=d.label;
+    const vis=chart.isDatasetVisible(i); b.classList.toggle('off',!vis); b.setAttribute('aria-pressed',String(vis));
+    b.onclick=()=>{chart.setDatasetVisibility(i,!chart.isDatasetVisible(i)); chart.update(); drawLegend();};
+    li.appendChild(b); ul.appendChild(li);});
 }
 document.getElementById('foot').textContent='';
 update();
