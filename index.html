@@ -17,27 +17,27 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-weight:400}
-body{zoom:135%}
+body{zoom:120%}
 header{padding:20px 24px 8px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px}
 h1{font-size:22px;font-weight:700;margin:0;text-wrap:balance}
 header p{margin:0;color:var(--muted);font-size:13px}
 main{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:16px;padding:8px 24px 24px}
 @media (max-width:860px){main{grid-template-columns:1fr;padding:8px 16px 16px}header{padding:16px 16px 4px}}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.sec{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:2px 0 0}
-.row{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:8px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.sec{font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#FF7E51;margin:2px 0 0}
+.row{display:grid;grid-template-columns:84px 1fr;gap:8px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:8px}
 .spin{display:flex;align-items:stretch;border:2px solid var(--input);border-radius:6px;overflow:hidden;background:var(--input-bg)}
-.spin input{width:100%;min-width:0;border:0;background:transparent;color:var(--input);font:700 20px var(--font);text-align:right;padding:6px 6px;font-variant-numeric:tabular-nums}
+.spin input{width:100%;min-width:0;border:0;background:transparent;color:var(--input);font:700 15px var(--font);text-align:right;padding:4px 4px;font-variant-numeric:tabular-nums}
 .spin input:focus{outline:none;background:#fff}
 .spin:focus-within{box-shadow:0 0 0 3px rgba(0,74,172,.25)}
 .btns{display:flex;flex-direction:column;border-left:1px solid var(--input)}
-.btns button{flex:1;border:0;background:var(--input);color:#fff;width:26px;font-size:11px;cursor:pointer;line-height:1;padding:0}
+.btns button{flex:1;border:0;background:var(--input);color:#fff;width:20px;font-size:9px;cursor:pointer;line-height:1;padding:0}
 .btns button+button{border-top:1px solid rgba(255,255,255,.35)}
 .btns button:hover{background:#0A5CD0}
 .btns button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
-.lbl{font-size:13px;line-height:1.3}
-.lbl small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px;white-space:pre-line}
-.info .val{font:700 20px var(--font);text-align:right;padding:6px 8px;border-radius:6px;background:#F2EFEB;font-variant-numeric:tabular-nums}
+.lbl{font-size:11.5px;line-height:1.25}
+.lbl small{display:block;color:var(--muted);font-size:10.5px;margin-top:2px;white-space:pre-line}
+.info .val{font:700 15px var(--font);text-align:right;padding:5px 6px;border-radius:6px;background:#F2EFEB;font-variant-numeric:tabular-nums}
 .info.dead .val{background:var(--dead);color:#fff}
 .info.ok .val{background:#2E7D4F;color:#fff}
 .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -55,17 +55,24 @@ footer{padding:0 24px 24px;font-size:11.5px;color:var(--muted);max-width:1100px}
 </header>
 <main>
   <section class="panel" aria-label="Parámetros de simulación">
-    <br>
-    <div class="sec">Parámetros editables</div>
+    <div class="sec"><br><br>Parámetros editables</div>
     <div id="inputs"></div>
-    <br><br>
-    <div class="sec">Resultados</div>
+    <div class="sec"><br><br>Resultados</div>
     <div class="row info"><div class="val" id="o_gb">—</div><div class="lbl">Crecimiento neto mensual (GB) de la Base de Datos Usada en la proyección</div></div>
-    <div class="row info" id="o_dead_row"><div class="val" id="o_dead">—</div><div class="lbl">Base de Datos = INACTIVA<small>(Tamaño BD = Storage)</small></div></div>
+    <div class="row info" id="o_dead_row"><div class="val" id="o_dead">—</div><div class="lbl">Base de Datos = INACTIVA<small>(BD Asignada + Redo = Storage)</small></div></div>
     <div class="row info"><div class="val" id="o_last">—</div><div class="lbl">Último dato real</div></div>
+    <div class="sec"><br><br>Datos sugeridos</div>
+    <div style="color: #004AAC;">
+        <div class="lbl" style="padding: 0 0 0 1ch; margin: 2px 0; line-height: 1.0; font-size: 0.85em;">
+          <span style="display: inline-block; width: 4ch; text-align: right;">3.5</span> TB Nuevo requerimiento fiscal.</div>
+        <div class="lbl" style="padding: 0 0 0 1ch; margin: 2px 0; line-height: 1.0; font-size: 0.85em;">
+          <span style="display: inline-block; width: 4ch; text-align: right;">11.0</span> TB Operación (no visible).</div>
+        <div class="lbl" style="padding: 0 0 0 1ch; margin: 2px 0; line-height: 1.0; font-size: 0.85em;">
+          <span style="display: inline-block; width: 4ch; text-align: right;">21.0</span> TB Operación (11 TB no visible + 10 TB Nuevo)</div>
+    </div>
   </section>
   <section class="chartbox" aria-label="Gráfica de proyección">
-    <br><h2 id="ctitle">Tamaño de Base de Datos RAP (TB): Real y Proyectado</h2>
+    <h2 id="ctitle">Tamaño de Base de Datos RAP (TB): Real y Proyectado</h2>
     <div class="canvas-wrap"><canvas id="chart" role="img" aria-label="Tamaño de la base de datos real y proyectado frente al storage"></canvas></div>
     <p class="note" id="cnote"></p>
   </section>
@@ -91,11 +98,11 @@ footer{padding:0 24px 24px;font-size:11.5px;color:var(--muted);max-width:1100px}
 <script>
 const RAW = [[84631.01, 6637.06, 1798.03, 233.26, 1271.73], [85605.46, 7854.48, 3350.93, 803.43, 1753.92], [86037.77, 6964.49, 3018.99, 100.75, 693.8], [86294.58, 6964.24, 3778.42, 358.5, 1612.48], [86406.04, 10856.54, 2501.25, 1905.24, 3271.09], [87445.03, 15329, 2426.18, 8162.09, 6572.03], [87545.3, 14858.78, 2153.57, 1224.96, 1406.69], [87666.18, 14510.4, 1428.6, 278.65, 1568.41], [87818.2, 13085.31, 3223.91, 5.67, 358.25], [89201.53, 11821.94, 3028.79, 142.57, 652.4200000000001], [89404.3, 11310.42, 2727.04, 5.95, 493.98], [89981.75, 10424.07, 3007.14, 3.6, 1323.07], [91581.12, 10796.86, 6470.82, 0, 217.42], [92944.97, 10400.46, 2830.92, 5.48, 133.49], [92995.8, 13135.99, 1795.45, 379.91, 3988.48], [93033.39, 13203.41, 1557.25, 0, 0], [93096.36, 15788.76, 1817.83, 696.08, 3561], [93266.2, 16053.59, 1485.06, 1235.74, 1783.14306640625], [93488.03, 15389.2, 1733.31, 76.35, 1261], [93498.03, 15191.84, 2883.12, 149.99, 1007], [93715.62, 14949.26, 2034.6, 209.57, 668], [93717.21, 15738.24, 3719.62, 239.15, 2065.58], [95284.02, 14179.98, 2305.54, 473.4, 2150.12], [96402.87, 13010.35, 3658.29, 152.72, 246.49], [96551.71, 13732.73, 5398.04, 696.4, 2427.49], [97030.25, 13232.96, 436.98, 190.28, 231.53], [97030.25, 13986.37, 2050.75, 677.2, 2352.73], [97257.02, 13804.74, 2227.89, 679.44, 1447], [97480.79, 12993.11, 2294.77, 311.57, 1513], [98888.31, 12626.03, 3097.6, 331.09, 1225.442807617188], [98888.31, 11783.7, 3221.12, 354.68, 1028.14453125], [98982.06, 10674.12, 1749.5, 290.88, 738.7861108398438], [101507.4, 10812.38, 1618.38, 594.59, 901.2], [101644.8, 10404.06, 1278.22, 341.3, 840.73]]
 ;
-// Réplica del modelo de PROYECCION (hojas PARAMS + MODELO). Todo en GB salvo indicación.
+// Réplica del modelo de PROYECCION (hojas PARAMS + MODELO). Todo en GB salvo indicación en parámetro.
 const P = {
   TB_GB: 1024, REQ_1: 2.5, REQ1_LOAD: [2026, 9], REQ2_LOAD: [2026, 11], REQ2_LOAD_MM: 1, HOLD_MM: 6,
   DEL_EFFECT: 'NINGUNO', LUN_GB: 1073708904 / 1024 / 1024, LUN_COUNT: 104, STO_EFF: 0.99,
-  SPACE_1_DATE: [2026, 11], REDO_GB: 216 * 8, MM_FORECAST: 36, CHART_END: [2027, 12]
+  SPACE_1_DATE: [2026, 11], REDO_GB: 216 * 8, MM_FORECAST: 36, CHART_END: [2028, 12]
 };
 const mi = (y, m) => y * 12 + (m - 1);                 // índice de mes
 const eom = (i) => Date.UTC(Math.floor(i / 12), i % 12 + 1, 0) / 86400000; // fin de mes en días
@@ -150,11 +157,11 @@ function runModel(raw, inp) {
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const lab = m => MES[m%12]+" '"+String(Math.floor(m/12)).slice(2);
 const INPUTS=[
- {id:'REQ_2',cell:'S2',label:'TB estimados para atender nuevo requerimiento fiscal',min:0,max:20,step:0.5,dec:1,val:0,pct:false},
- {id:'SPACE_1',cell:'S7',label:'TB estimados adicional para atender operación',min:0,max:60,step:0.5,dec:1,val:0,pct:false},
+ {id:'REQ_2',cell:'S2',label:'TB estimados para atender nuevo requerimiento fiscal',min:0,max:20,step:0.5,dec:1,val:0.0,pct:false},
+ {id:'SPACE_1',cell:'S7',label:'TB estimados adicional para atender operación',min:0,max:24,step:0.5,dec:1,val:0.0,pct:false},
  {id:'N_CAL',cell:'S12',label:'Cantidad de meses usados para promediar',min:3,max:12,step:1,dec:0,val:12,pct:false},
- {id:'REO_FACTOR',cell:'S17',label:'Factor de reorganización',hint:'► 0%  No se reorganiza\n► 100%  Igual que histórico',min:0,max:2,step:0.1,dec:0,val:1,pct:true},
- {id:'FREE_MIN',cell:'S22',label:'% Espacio libre mínimo',hint:'(Espacio Libre / BD Total)',min:0,max:0.5,step:0.01,dec:0,val:0.1,pct:true},
+ {id:'REO_FACTOR',cell:'S17',label:'Factor de reorganización',hint:'► 0%  No se reorganiza\n► 100%  Igual que histórico',min:0,max:1,step:0.1,dec:0,val:1,pct:true},
+ {id:'FREE_MIN',cell:'S22',label:'% Espacio libre mínimo',hint:'(Espacio Libre / BD Total)',min:0,max:0.2,step:0.01,dec:0,val:0.1,pct:true},
 ];
 const fmt=(x,d)=>x.toLocaleString('es-MX',{minimumFractionDigits:d,maximumFractionDigits:d});
 const show=c=>c.pct?fmt(c.val*100,c.dec)+'%':fmt(c.val,c.dec);
@@ -177,6 +184,7 @@ const deadLabel={id:'deadLabel',afterDatasetsDraw(ch){const ds=ch.data.datasets.
   meta.data.forEach((b,i)=>{const v=ch.data.datasets[ds].data[i]; if(v==null) return; const g=ch.ctx; g.save(); g.font='600 12px Inter, sans-serif';
   const t='INACTIVA '+ch.data.labels[i]; const w=g.measureText(t).width+10; let x=b.x-w/2; x=Math.max(ch.chartArea.left,Math.min(x,ch.chartArea.right-w)); const y=Math.max(ch.chartArea.top+2,b.y-24);
   g.fillStyle='#004AAC'; g.fillRect(x,y,w,18); g.fillStyle='#fff'; g.textBaseline='middle'; g.fillText(t,x+5,y+9); g.restore();});}};
+const fixPos={id:'fixPos',beforeEvent(ch,args){const e=args.event,n=e.native;if(!n||n.clientX==null)return;const r=ch.canvas.getBoundingClientRect();if(!r.width)return;e.x=(n.clientX-r.left)*ch.width/r.width;e.y=(n.clientY-r.top)*ch.height/r.height;}};
 let chart;
 function update(){
   const v={}; INPUTS.forEach(c=>v[c.id]=c.val);
@@ -194,7 +202,11 @@ function update(){
   ? 'La base de datos no llega al storage en el horizonte de 36 meses (hasta ' + lab(o.lastReal + 36) + ').'
   : (o.dead > END 
       ? 'La fecha de inactividad (' + deadTxt + ') queda después del rango de la gráfica (dic \'27).' 
-      : '<br><br>*** Barra azul: mes en que la BD Asignada + redo supera el Storage.</br>*** Barra gris: inicio de la proyección.');
+      : `<div style="display: block; margin-top: 2em; text-align: left;">
+           <div style="display: block; font-size: 12px; color: #004AAC;">*** Barra azul: mes en que la BD Asignada + Redo supera el Storage.</div>
+           <div style="display: block; font-size: 12px; color: #A6A6A6; margin-top: 4px;">*** Barra gris: inicio de la proyección.</div>
+           <div style="display: block; font-size: 15px; color: #D14600; margin-top: 12px;"><h2 id="ctitle">Presionar <b>F11</b> (o <b>Esc</b>) para entrar/salir de pantalla completa.</h2></div>
+         </div>`);
   const ds=[
     {type:'line',label:'Database Assigned +Redo (TB)',data:rows.map(r=>t(r.DBA)),borderColor:C.dba,borderWidth:3,pointRadius:0,fill:false,order:1},
     {type:'line',label:'Storage (TB)',data:rows.map(r=>t(r.STO)),borderColor:C.sto,borderWidth:4,pointRadius:0,fill:false,order:0},
@@ -206,12 +218,12 @@ function update(){
     {type:'line',label:'Projected DB Total (TB)',data:proj('DBT'),backgroundColor:C.totP,borderWidth:0,pointRadius:0,fill:'origin',order:9},
   ];
   if(!chart){
-    chart=new Chart(document.getElementById('chart'),{data:{labels,datasets:ds},plugins:[deadLabel],options:{
+    chart=new Chart(document.getElementById('chart'),{data:{labels,datasets:ds},plugins:[deadLabel,fixPos],options:{
       responsive:true,maintainAspectRatio:false,animation:{duration:250},interaction:{mode:'index',intersect:false},
       plugins:{legend:{position:'right',labels:{boxWidth:14,font:{family:'Inter',size:12},color:'#0E1020',
         sort:(a,b)=>[6,4,7,5,0,1,2,3].indexOf(a.datasetIndex)-[6,4,7,5,0,1,2,3].indexOf(b.datasetIndex)}},
         tooltip:{filter:i=>i.raw!=null,callbacks:{label:i=>i.dataset.label.replace(/ \(.*\)$/,'')+': '+fmt(i.raw,2)+' TB'}}},
-      scales:{x:{grid:{display:false},ticks:{maxRotation:90,minRotation:90,autoSkip:false,font:{family:'Inter',size:11,weight:'600'},color:'#0E1020'}},
+      scales:{x:{grid:{display:false},ticks:{maxRotation:90,minRotation:90,autoSkip:false,font:{family:'Inter',size:10,weight:'600'},color:'#0E1020'}},
               y:{min:60,suggestedMax:120,ticks:{stepSize:10,callback:v=>fmt(v,0),font:{family:'Inter',size:12},color:'#0E1020'},grid:{color:'#E4DED7'},title:{display:true,text:'TB',color:'#5B5E6E'}}}}});
     if(matchMedia('(max-width:860px)').matches){chart.options.plugins.legend.position='bottom';chart.options.scales.x.ticks.autoSkip=true;chart.update();}
   } else { chart.data.labels=labels; chart.data.datasets.forEach((d,i)=>{d.data=ds[i].data; d.label=ds[i].label;}); chart.update(); }
@@ -219,5 +231,32 @@ function update(){
 document.getElementById('foot').textContent='';
 update();
 </script>
+
+<!-- Nota discreta al final de la página -->
+<!--<footer style="text-align: center; padding: 20px; font-size: 12px; opacity: 0.7;">
+  Presionar <b>F11</b> (o <b>Esc</b>) para entrar/salir de pantalla completa.
+</footer>
+
+<!-- Botón flotante para activar/salir de pantalla completa -->
+<button id="btn-fs" onclick="toggleFS()" style="position: fixed; bottom: 16px; right: 16px; padding: 8px 14px; border-radius: 6px; border: 1px solid #ccc; background: #222; color: #fff; cursor: pointer; font-size: 12px; z-index: 9999;">
+  ⛶ Pantalla completa
+</button>
+
+<script>
+  function toggleFS() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  // Cambia el texto del botón automáticamente según el estado
+  document.addEventListener('fullscreenchange', () => {
+    const btn = document.getElementById('btn-fs');
+    btn.textContent = document.fullscreenElement ? '✕ Salir de pantalla completa' : '⛶ Pantalla completa';
+  });
+</script>
+
 </body>
 </html>
